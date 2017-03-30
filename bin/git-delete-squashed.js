@@ -38,8 +38,7 @@ function git (args) {
  * @returns {Promise<string[]>} A list of local branch names
  */
 function getBranchNames () {
-  return git(['for-each-ref', 'refs/heads/', "--format='%(refname:short)'"])
-    .then(result => result.split('\n').map(line => line.replace(/^'(.*)'$/, '$1')));
+  return git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)']).then(result => result.split('\n'));
 }
 
 /**
