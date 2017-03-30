@@ -1,0 +1,36 @@
+{
+  "name": "git-delete-squashed",
+  "version": "1.0.0",
+  "description": "Delete branches that have been squashed and merged into master",
+  "scripts": {
+    "lint": "eslint bin/",
+    "test": "npm run lint"
+  },
+  "bin": {
+    "git-delete-squashed": "bin/git-delete-squashed.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/not-an-aardvark/git-delete-squashed.git"
+  },
+  "keywords": [
+    "git"
+  ],
+  "author": "Teddy Katz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/not-an-aardvark/git-delete-squashedissues"
+  },
+  "engines": {
+    "node": ">=4.0.0"
+  },
+  "homepage": "https://github.com/not-an-aardvark/git-delete-squashed#readme",
+  "dependencies": {
+    "bluebird": "^3.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^3.18.0",
+    "eslint-config-not-an-aardvark": "^2.0.0",
+    "eslint-plugin-node": "^4.2.2"
+  }
+}

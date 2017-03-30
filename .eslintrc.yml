@@ -1,0 +1,10 @@
+extends:
+  - not-an-aardvark
+  - plugin:node/recommended
+plugins:
+  - node
+rules:
+  no-console: off
+  no-process-exit: off
+  require-jsdoc: error
+  valid-jsdoc: error
