@@ -19,7 +19,7 @@
   "author": "Teddy Katz",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/not-an-aardvark/git-delete-squashedissues"
+    "url": "https://github.com/not-an-aardvark/git-delete-squashed/issues"
   },
   "engines": {
     "node": ">=4.0.0"
