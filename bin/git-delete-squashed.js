@@ -4,8 +4,27 @@
 
 const childProcess = require('child_process');
 const Promise = require('bluebird');
-const execFile = Promise.promisify(childProcess.execFile);
 const DEFAULT_BRANCH_NAME = 'master';
+
+/**
+ * Spawns a process
+ * @param {string} command The command to run
+ * @param {string[]} args The arguments to pass
+ * @returns {Promise<string>} A Promise for the stdout of the process
+ */
+function spawn (command, args) {
+  return new Promise((resolve, reject) => {
+    const child = childProcess.spawn(command, args);
+
+    let stdout = '';
+    let stderr = '';
+
+    child.stdout.on('data', data => stdout += data);
+    child.stderr.on('data', data => stderr += data);
+
+    child.on('close', exitCode => exitCode ? reject(stderr) : resolve(stdout));
+  });
+}
 
 /**
  * Memoizes the result of calling a function
@@ -29,7 +48,7 @@ function memoize (func) {
  * @returns {Promise<string>} The output from `git`
  */
 function git (args) {
-  return execFile('git', ['--no-pager'].concat(args), { maxBuffer: Infinity })
+  return spawn('git', ['--no-pager'].concat(args))
     .then(stdoutBuffer => stdoutBuffer.toString().replace(/\n$/, ''));
 }
 
