@@ -1,6 +1,6 @@
 {
   "name": "git-delete-squashed",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Delete branches that have been squashed and merged into master",
   "scripts": {
     "lint": "eslint bin/",
