@@ -10,11 +10,17 @@ const DEFAULT_BRANCH_NAME = 'master';
  * Spawns a process
  * @param {string} command The command to run
  * @param {string[]} args The arguments to pass
+ * @param {string} [stdin] The stdin for the process
  * @returns {Promise<string>} A Promise for the stdout of the process
  */
-function spawn (command, args) {
+function spawn (command, args, stdin) {
   return new Promise((resolve, reject) => {
     const child = childProcess.spawn(command, args);
+
+    if (typeof stdin === 'string') {
+      child.stdin.write(stdin);
+      child.stdin.end();
+    }
 
     let stdout = '';
     let stderr = '';
@@ -45,10 +51,11 @@ function memoize (func) {
 /**
  * Calls `git` with the given arguments from the CWD
  * @param {string[]} args A list of arguments
+ * @param {string} [stdin] The stdin for the process
  * @returns {Promise<string>} The output from `git`
  */
-function git (args) {
-  return spawn('git', ['--no-pager'].concat(args))
+function git (args, stdin) {
+  return spawn('git', ['--no-pager'].concat(args), stdin)
     .then(stdoutBuffer => stdoutBuffer.toString().replace(/\n$/, ''));
 }
 
@@ -74,10 +81,10 @@ function getCommonAncestorHash (branchA, branchB) {
  * Gets the diff between two git refs
  * @param {string} fromRef A git reference representing the base of the diff
  * @param {string} toRef A git reference representing the head of the diff
- * @returns {Promise<string>} A git diff between the two refs
+ * @returns {Promise<string>} A git patch ID of the diff between the two refs
  */
-function getDiff (fromRef, toRef) {
-  return git(['diff', `${fromRef}...${toRef}`]);
+function getDiffPatchId (fromRef, toRef) {
+  return git(['diff', `${fromRef}...${toRef}`]).then(diff => git(['patch-id'], diff));
 }
 
 /**
@@ -91,11 +98,11 @@ const getCommitsToMaster = memoize(fromRef => {
 });
 
 /**
- * Gets the diff of a single commit
+ * Gets the patch id of a single commit
  * @param {string} hash The commit hash
  * @returns {Promise<string>} The diff of the commit with the given hash
  */
-const getCommitDiff = memoize(hash => git(['diff', `${hash}^`, hash]));
+const getCommitDiffId = memoize(hash => git(['diff', `${hash}^`, hash]).then(diff => git(['patch-id'], diff)));
 
 return getBranchNames().tap(branchNames => {
   if (branchNames.indexOf(DEFAULT_BRANCH_NAME) === -1) {
@@ -109,13 +116,13 @@ return getBranchNames().tap(branchNames => {
   // Get the common ancestor with the branch and master
   return getCommonAncestorHash(DEFAULT_BRANCH_NAME, branchName).then(commonAncestorHash =>
     // Get the diff between the common ancestor and the branch tip
-    getDiff(commonAncestorHash, branchName).then(branchDiff =>
+    getDiffPatchId(commonAncestorHash, branchName).then(branchPatchId =>
       // Iterate through all the commits to master since the ancestor
       getCommitsToMaster(commonAncestorHash)
-        .map(getCommitDiff)
-        // If the diff for any commit to master since the ancestor is the same as the diff between the ancestor
+        .map(getCommitDiffId)
+        // If the patch for any commit to master since the ancestor is the same as the patch between the ancestor
         // and the branch tip, the branch can be deleted.
-        .map(commitDiff => commitDiff === branchDiff)
+        .map(commitPatchId => commitPatchId === branchPatchId)
         .then(results => results.some(Boolean))
     )
   );

@@ -28,10 +28,4 @@ $ git config --global alias.ds !git-delete-squashed
 
 ## Details
 
-To determine if a branch `b` is squash-merged, the following algorithm is used:
-
-1. Find the most recent ancestor commit `ancestor` between `master` and `b`.
-1. Compute the diff between `ancestor` and `b`.
-1. If there are any commits between `ancestor` and `master` whose diff matches the diff between `ancestor` and `b`, the branch is squash-merged.
-
-`git-delete-squashed` iterates over all local branches and deletes the ones that are squash-merged.
+To determine if a branch is squash-merged, git-delete-squashed checks the diff from where the branch diverges from master to the current state of the branch, and checks the diff of all commits to master since the branch was created. If any of the commits match the branch diff, the branch is deleted.
