@@ -44,19 +44,15 @@ function getCommitDiffId (hash) {
   return commitCache.get(hash);
 }
 
-return git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)'])
-  .then(result => result.split('\n'))
+git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)'])
+  .then(branchListOutput => branchListOutput.split('\n'))
   .tap(branchNames => {
     if (branchNames.indexOf(DEFAULT_BRANCH_NAME) === -1) {
       throw `fatal: no branch named '${DEFAULT_BRANCH_NAME}' found in this repo`;
     }
-  }).filter(branchName => {
-    if (branchName === DEFAULT_BRANCH_NAME) {
-      return false;
-    }
-
+  }).filter(branchName =>
     // Get the common ancestor with the branch and master
-    return git(['merge-base', DEFAULT_BRANCH_NAME, branchName]).then(commonAncestorHash =>
+    branchName !== DEFAULT_BRANCH_NAME && git(['merge-base', DEFAULT_BRANCH_NAME, branchName]).then(commonAncestorHash =>
       // Get the diff between the common ancestor and the branch tip
       git(['diff', `${commonAncestorHash}...${branchName}`]).then(diff => git(['patch-id'], diff)).then(branchPatchId =>
         // Iterate through all the commits to master since the ancestor
@@ -65,15 +61,11 @@ return git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)'])
           .map(getCommitDiffId)
           // If the patch for any commit to master since the ancestor is the same as the patch between the ancestor
           // and the branch tip, the branch can be deleted.
-          .map(commitPatchId => commitPatchId === branchPatchId)
-          .then(results => results.some(Boolean))
+          .then(results => results.some(commitPatchId => commitPatchId === branchPatchId))
       )
-    );
-  }).tap(branchNamesToDelete => {
-    if (branchNamesToDelete.length) {
-      return git(['checkout', DEFAULT_BRANCH_NAME]);
-    }
-  })
+    )
+  )
+  .tap(branchNamesToDelete => branchNamesToDelete.length && git(['checkout', DEFAULT_BRANCH_NAME]))
   .mapSeries(branchName => git(['branch', '-D', branchName]))
   .mapSeries(stdout => console.log(stdout))
   .catch(err => console.error(err.cause || err));
