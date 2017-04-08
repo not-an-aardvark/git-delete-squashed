@@ -28,7 +28,7 @@ function git (args, stdin) {
     child.stderr.on('data', data => stderr += data);
 
     child.on('close', exitCode => exitCode ? reject(stderr) : resolve(stdout));
-  }).then(stdoutBuffer => stdoutBuffer.toString().replace(/\n$/, ''));
+  }).then(stdout => stdout.replace(/\n$/, ''));
 }
 
 const commitCache = new Map();
