@@ -14,7 +14,7 @@ const DEFAULT_BRANCH_NAME = 'master';
  */
 function git (args, stdin) {
   return new Promise((resolve, reject) => {
-    const child = childProcess.spawn('git', ['--no-pager'].concat(args));
+    const child = childProcess.spawn('git', args);
 
     if (typeof stdin === 'string') {
       child.stdin.write(stdin);
