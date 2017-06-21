@@ -58,12 +58,13 @@ git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)'])
         // Iterate through all the commits to master since the ancestor
         git(['log', '--format=%H', `${commonAncestorHash}...${DEFAULT_BRANCH_NAME}`])
           .then(logOutput => logOutput ? logOutput.split('\n') : [])
-          .map(getCommitDiffId)
+          .map(getCommitDiffId, { concurrency: 10 })
           // If the patch for any commit to master since the ancestor is the same as the patch between the ancestor
           // and the branch tip, the branch can be deleted.
           .then(results => results.some(commitPatchId => commitPatchId === branchPatchId))
       )
-    )
+    ),
+    { concurrency: 1 }
   )
   .tap(branchNamesToDelete => branchNamesToDelete.length && git(['checkout', DEFAULT_BRANCH_NAME]))
   .mapSeries(branchName => git(['branch', '-D', branchName]))
