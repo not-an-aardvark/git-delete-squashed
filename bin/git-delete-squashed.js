@@ -39,7 +39,13 @@ const commitCache = new Map();
  */
 function getCommitDiffId (hash) {
   if (!commitCache.has(hash)) {
-    commitCache.set(hash, git(['diff', `${hash}^`, hash]).then(diff => git(['patch-id'], diff)));
+    commitCache.set(
+      hash,
+
+      // Use diff-tree rather than `diff commit^ commit` to avoid throwing if a root commit is found.
+      git(['diff-tree', '--patch', '--no-commit-id', hash])
+        .then(diff => git(['patch-id'], diff))
+    );
   }
   return commitCache.get(hash);
 }
