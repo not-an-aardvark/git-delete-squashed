@@ -4,26 +4,23 @@ This is a tool that deletes all of your git branches that have been "squash-merg
 
 This is useful if you work on a project that squashes branches into master. After your branch is squashed and merged, you can use this tool to clean up the local branch.
 
-## Installation
+## Usage
 
-Node 4+ is required.
+### sh
+
+To run as a shellscript, simply copy the following command (setting up an alias is recommended). There's no need to clone the repo.
+
+```bash
+git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
+```
+
+### Node.js
+
+You can also install the tool as a Node.js package from NPM. (The package code is in this repo.)
 
 ```bash
 $ npm install --global git-delete-squashed
-```
-
-## Usage
-
-From a git repo:
-
-```bash
 $ git-delete-squashed
-```
-
-You can also set up a [git alias](https://git-scm.com/book/en/v2/Git-Basics-Git-Aliases) if you don't want to type `git-delete-squashed` every time. For example, to alias this command to `git ds`, you can use:
-
-```bash
-$ git config --global alias.ds !git-delete-squashed
 ```
 
 ## Details
