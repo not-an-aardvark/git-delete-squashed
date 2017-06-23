@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.3 (2017-06-23)
+
+* Docs: add shell script alternative to readme ([59bb490](https://github.com/not-an-aardvark/git-delete-squashed/commit/59bb49097171f41d148be215eea25c94d2adec4e))
+* Chore: refactor to use `git cherry` ([a1babc2](https://github.com/not-an-aardvark/git-delete-squashed/commit/a1babc21dc21b53fd472821eef0729af7f7d8cf2))
+* Fix: use git diff-tree rather than git diff (fixes [#2](https://github.com/not-an-aardvark/git-delete-squashed/issues/2)) ([8d2c524](https://github.com/not-an-aardvark/git-delete-squashed/commit/8d2c524c94e050a2c72f5f6996a1bfce5dc4ecbb))
+
 ## v1.0.2 (2017-06-21)
 
 * Fix: Cap the number of processes running at a time (fixes [#1](https://github.com/not-an-aardvark/git-delete-squashed/issues/1)) ([f4d4011](https://github.com/not-an-aardvark/git-delete-squashed/commit/f4d4011cf4c6a0416d45e10181dd74856c731438))
