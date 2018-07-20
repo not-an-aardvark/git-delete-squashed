@@ -4,7 +4,7 @@
 
 const childProcess = require('child_process');
 const Promise = require('bluebird');
-const DEFAULT_BRANCH_NAME = 'master';
+const DEFAULT_BRANCH_NAME = process.env.DEFAULT_BRANCH || 'master';
 
 /**
  * Calls `git` with the given arguments from the CWD
