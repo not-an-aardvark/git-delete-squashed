@@ -6,22 +6,16 @@ This is useful if you work on a project that squashes branches into master. Afte
 
 ## Usage
 
-### sh
-
-To run as a shellscript, simply copy the following command (setting up an alias is recommended). There's no need to clone the repo.
-
-```bash
-git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base master $branch) && [[ $(git cherry master $(git commit-tree $(git rev-parse $branch^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
-```
-
-### Node.js
-
-You can also install the tool as a Node.js package from NPM. (The package code is in this repo.)
+You can install the tool as a node.js package from npm. (The package code is in this repo.)
 
 ```bash
 $ npm install --global git-delete-squashed
 $ git-delete-squashed
 ```
+
+## Options
+
+`--dry-run` prints a list of the branches that would be deleted, but does not delete them.
 
 ## Details
 
