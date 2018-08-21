@@ -5,6 +5,7 @@
 const childProcess = require('child_process');
 const Promise = require('bluebird');
 const DEFAULT_BRANCH_NAME = 'master';
+const dryRun = process.argv.some(arg => arg === '--dry-run')
 
 /**
  * Calls `git` with the given arguments from the CWD
@@ -42,6 +43,13 @@ git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)'])
       .then(output => output.startsWith('-'))
   )
   .tap(branchNamesToDelete => branchNamesToDelete.length && git(['checkout', DEFAULT_BRANCH_NAME]))
-  .mapSeries(branchName => git(['branch', '-D', branchName]))
+  .mapSeries(branchName => {
+    if (dryRun) {
+      return branchName + ' will be removed'
+    } else {
+      return git(['branch', '-D', branchName])
+    }
+  })
   .mapSeries(stdout => console.log(stdout))
   .catch(err => console.error(err.cause || err));
+
