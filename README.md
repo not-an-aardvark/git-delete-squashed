@@ -6,10 +6,8 @@ This is useful if you work on a project that squashes branches into master. Afte
 
 ## Usage
 
-You can install the tool as a node.js package from npm. (The package code is in this repo.)
-
 ```bash
-$ npm install --global git-delete-squashed
+$ npm install --global raquelxmoss/git-delete-squashed
 $ git-delete-squashed
 ```
 
