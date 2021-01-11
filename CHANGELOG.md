@@ -1,5 +1,9 @@
 # Changelog
 
+## v2.0.0 (2018-06-23)
+* Forked
+* Feat: supports for `main` or other default branch names ([8df0977](https://github.com/teppeis/git-delete-squashed/commit/8df0977bdd39a24732246f6fcc6a0a5e28c0d4c4))
+
 ## v1.0.3 (2017-06-23)
 
 * Docs: add shell script alternative to readme ([59bb490](https://github.com/not-an-aardvark/git-delete-squashed/commit/59bb49097171f41d148be215eea25c94d2adec4e))
