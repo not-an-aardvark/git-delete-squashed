@@ -4,7 +4,7 @@
 
 const childProcess = require("child_process");
 const Promise = require("bluebird");
-const DEFAULT_BRANCH_NAME = "master";
+let defaultBranch = process.env.DEFAULT_BRANCH;
 
 /**
  * Calls `git` with the given arguments from the CWD
@@ -30,14 +30,22 @@ function git(args) {
 git(["for-each-ref", "refs/heads/", "--format=%(refname:short)"])
   .then((branchListOutput) => branchListOutput.split("\n"))
   .tap((branchNames) => {
-    if (branchNames.indexOf(DEFAULT_BRANCH_NAME) === -1) {
-      throw `fatal: no branch named '${DEFAULT_BRANCH_NAME}' found in this repo`;
+    if (defaultBranch) {
+      return;
+    }
+    // guess default branch
+    if (branchNames.includes("master")) {
+      defaultBranch = "master";
+    } else if (branchNames.includes("main")) {
+      defaultBranch = "main";
+    } else {
+      throw `fatal: no branch named '${defaultBranch}' found in this repo`;
     }
   })
   .filter((branchName) =>
     // Get the common ancestor with the branch and master
     Promise.join(
-      git(["merge-base", DEFAULT_BRANCH_NAME, branchName]),
+      git(["merge-base", defaultBranch, branchName]),
       git(["rev-parse", `${branchName}^{tree}`]),
       (ancestorHash, treeId) =>
         git([
@@ -50,13 +58,13 @@ git(["for-each-ref", "refs/heads/", "--format=%(refname:short)"])
         ])
     )
       .then((danglingCommitId) =>
-        git(["cherry", DEFAULT_BRANCH_NAME, danglingCommitId])
+        git(["cherry", defaultBranch, danglingCommitId])
       )
       .then((output) => output.startsWith("-"))
   )
   .tap(
     (branchNamesToDelete) =>
-      branchNamesToDelete.length && git(["checkout", DEFAULT_BRANCH_NAME])
+      branchNamesToDelete.length && git(["checkout", defaultBranch])
   )
   .mapSeries((branchName) => git(["branch", "-D", branchName]))
   .mapSeries((stdout) => console.log(stdout))
