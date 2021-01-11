@@ -1,30 +1,30 @@
 {
-  "name": "git-delete-squashed",
-  "version": "1.0.3",
-  "description": "Delete branches that have been squashed and merged into master",
-  "scripts": {
-    "lint": "eslint bin/",
-    "test": "npm run lint"
+  "name": "@teppeis/git-delete-squashed",
+  "version": "2.0.0",
+  "description": "Delete branches that have been squashed and merged into default branch",
+  "publishConfig": {
+    "access": "public"
   },
+  "scripts": {},
   "bin": {
     "git-delete-squashed": "bin/git-delete-squashed.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/not-an-aardvark/git-delete-squashed.git"
+    "url": "git+https://github.com/teppeis/git-delete-squashed.git"
   },
   "keywords": [
     "git"
   ],
-  "author": "Teddy Katz",
+  "author": "Teppei Sato <teppeis@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/not-an-aardvark/git-delete-squashed/issues"
+    "url": "https://github.com/teppeis/git-delete-squashed/issues"
   },
   "engines": {
-    "node": ">=4.0.0"
+    "node": ">=12"
   },
-  "homepage": "https://github.com/not-an-aardvark/git-delete-squashed#readme",
+  "homepage": "https://github.com/teppeis/git-delete-squashed",
   "dependencies": {
     "bluebird": "^3.5.0"
   },
