@@ -7,6 +7,8 @@ This is useful if you work on a project that squashes branches into default bran
 
 ## Guessing default branch (difference from original)
 
+This fork supports for `main` or other default branch names.
+
 1. If env `DEFAULT_BRANCH` is set, use it.
 2. If the repo has local branch `master`, use it.
 3. If the repo has local branch `main`, use it.
