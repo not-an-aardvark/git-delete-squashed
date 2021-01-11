@@ -9,7 +9,7 @@ let defaultBranch = process.env.DEFAULT_BRANCH;
 /**
  * Calls `git` with the given arguments from the CWD
  * @param {string[]} args A list of arguments
- * @returns {Promise<string>} The output from `git`
+ * @return {Promise<string>} The output from `git`
  */
 function git(args) {
   return new Promise((resolve, reject) => {
@@ -21,9 +21,7 @@ function git(args) {
     child.stdout.on("data", (data) => (stdout += data));
     child.stderr.on("data", (data) => (stderr += data));
 
-    child.on("close", (exitCode) =>
-      exitCode ? reject(stderr) : resolve(stdout)
-    );
+    child.on("close", (exitCode) => (exitCode ? reject(stderr) : resolve(stdout)));
   }).then((stdout) => stdout.replace(/\n$/, ""));
 }
 
@@ -39,7 +37,7 @@ git(["for-each-ref", "refs/heads/", "--format=%(refname:short)"])
     } else if (branchNames.includes("main")) {
       defaultBranch = "main";
     } else {
-      throw `fatal: no branch named '${defaultBranch}' found in this repo`;
+      throw new Error(`fatal: no branch named '${defaultBranch}' found in this repo`);
     }
   })
   .filter((branchName) =>
@@ -48,24 +46,12 @@ git(["for-each-ref", "refs/heads/", "--format=%(refname:short)"])
       git(["merge-base", defaultBranch, branchName]),
       git(["rev-parse", `${branchName}^{tree}`]),
       (ancestorHash, treeId) =>
-        git([
-          "commit-tree",
-          treeId,
-          "-p",
-          ancestorHash,
-          "-m",
-          `Temp commit for ${branchName}`,
-        ])
+        git(["commit-tree", treeId, "-p", ancestorHash, "-m", `Temp commit for ${branchName}`])
     )
-      .then((danglingCommitId) =>
-        git(["cherry", defaultBranch, danglingCommitId])
-      )
+      .then((danglingCommitId) => git(["cherry", defaultBranch, danglingCommitId]))
       .then((output) => output.startsWith("-"))
   )
-  .tap(
-    (branchNamesToDelete) =>
-      branchNamesToDelete.length && git(["checkout", defaultBranch])
-  )
+  .tap((branchNamesToDelete) => branchNamesToDelete.length && git(["checkout", defaultBranch]))
   .mapSeries((branchName) => git(["branch", "-D", branchName]))
   .mapSeries((stdout) => console.log(stdout))
   .catch((err) => console.error(err.cause || err));

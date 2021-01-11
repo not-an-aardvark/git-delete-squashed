@@ -5,7 +5,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {},
+  "scripts": {
+    "lint": "eslint bin",
+    "lint:fix": "eslint bin --fix",
+    "test": "npm run lint"
+  },
   "bin": {
     "git-delete-squashed": "bin/git-delete-squashed.js"
   },
@@ -28,5 +32,9 @@
   "dependencies": {
     "bluebird": "^3.5.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "eslint": "^7.17.0",
+    "eslint-config-teppeis": "^11.0.2",
+    "prettier": "^2.2.1"
+  }
 }

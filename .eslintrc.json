@@ -1,0 +1,4 @@
+{
+  "root": true,
+  "extends": ["teppeis/node-v12", "teppeis/+prettier"]
+}
