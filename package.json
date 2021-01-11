@@ -28,9 +28,5 @@
   "dependencies": {
     "bluebird": "^3.5.0"
   },
-  "devDependencies": {
-    "eslint": "^3.18.0",
-    "eslint-config-not-an-aardvark": "^2.0.0",
-    "eslint-plugin-node": "^4.2.2"
-  }
+  "devDependencies": {}
 }
