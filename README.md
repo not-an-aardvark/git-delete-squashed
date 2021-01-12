@@ -1,5 +1,10 @@
 # @teppeis/git-delete-squashed (forked)
 
+[![NPM version][npm-image]][npm-url]
+![Node.js Version Support][node-version]
+[![Dependency Status][deps-image]][deps-url]
+[![License][license]][license-url]
+
 This is a tool that deletes all of your git branches that have been "squash-merged" into default branch (master or main).
 
 This is useful if you work on a project that squashes branches into default branch. After your branch is squashed and merged, you can use this tool to clean up the local branch.
@@ -35,3 +40,12 @@ $ npx @teppeis/git-delete-squashed
 ## Details
 
 To determine if a branch is squash-merged, git-delete-squashed creates a temporary dangling squashed commit with [`git commit-tree`](https://git-scm.com/docs/git-commit-tree). Then it uses [`git cherry`](https://git-scm.com/docs/git-cherry) to check if the squashed commit has already been applied to `main`. If so, it deletes the branch.
+
+[npm-image]: https://img.shields.io/npm/v/@teppeis/git-delete-squashed.svg
+[npm-url]: https://npmjs.com/package/@teppeis/git-delete-squashed
+[npm-downloads-image]: https://img.shields.io/npm/dm/@teppeis/git-delete-squashed.svg
+[deps-image]: https://img.shields.io/david/teppeis/git-delete-squashed.svg
+[deps-url]: https://david-dm.org/teppeis/git-delete-squashed
+[node-version]: https://img.shields.io/badge/Node.js-v12+-brightgreen.svg
+[license]: https://img.shields.io/npm/l/@teppeis/git-delete-squashed.svg
+[license-url]: /LICENSE.md
