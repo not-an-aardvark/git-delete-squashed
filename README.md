@@ -12,7 +12,7 @@ This is useful if you work on a project that squashes branches into default bran
 
 ## Guessing default branch (difference from original)
 
-This fork supports for `main` or other default branch names.
+This fork supports not only `master`, but also `main` or other default branch names in the following order.
 
 1. If env `DEFAULT_BRANCH` is set, use it.
 2. If the repo has local branch `master`, use it.
@@ -20,14 +20,6 @@ This fork supports for `main` or other default branch names.
 4. Throws an error.
 
 ## Usage
-
-### sh
-
-To run as a shellscript, simply copy the following command (setting up an alias is recommended). There's no need to clone the repo. (If the default branch is `main`)
-
-```bash
-git checkout -q main && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base main $branch) && [[ $(git cherry main $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
-```
 
 ### Node.js
 
