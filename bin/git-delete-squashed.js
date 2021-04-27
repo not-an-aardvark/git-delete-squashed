@@ -5,7 +5,7 @@
 const childProcess = require('child_process');
 const Promise = require('bluebird');
 const DEFAULT_BRANCH_NAME = 'master';
-const RUN_WITH_NODE = process.argv[0].includes("node");
+const RUN_WITH_NODE = process.argv[0].includes('node');
 const selectedBranchName = process.argv[RUN_WITH_NODE ? 2 : 1] || DEFAULT_BRANCH_NAME;
 
 /**
@@ -30,7 +30,7 @@ function git (args) {
 git(['for-each-ref', 'refs/heads/', '--format=%(refname:short)'])
   .then(branchListOutput => branchListOutput.split('\n'))
   .tap(branchNames => {
-    if (branchNames.indexOf((selectedBranchName)) === -1) {
+    if (branchNames.indexOf(selectedBranchName) === -1) {
       throw `fatal: no branch named '${selectedBranchName}' found in this repo`;
     }
   }).filter(branchName =>
