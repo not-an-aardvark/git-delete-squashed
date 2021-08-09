@@ -23,6 +23,14 @@ $ npm install --global git-delete-squashed
 $ git-delete-squashed
 ```
 
+You can specify an alternate branch to check for squashed merges, as well. This is useful for different names of trunk branches like `main` or `develop`.
+
+```bash
+$ npm install --global git-delete-squashed
+$ git-delete-squashed main
+```
+
+
 ## Details
 
 To determine if a branch is squash-merged, git-delete-squashed creates a temporary dangling squashed commit with [`git commit-tree`](https://git-scm.com/docs/git-commit-tree). Then it uses [`git cherry`](https://git-scm.com/docs/git-cherry) to check if the squashed commit has already been applied to `master`. If so, it deletes the branch.
