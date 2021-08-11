@@ -18,18 +18,14 @@ git checkout -q master && git for-each-ref refs/heads/ "--format=%(refname:short
 
 You can also install the tool as a Node.js package from NPM. (The package code is in this repo.)
 
+Additionally, you can specify an alternate branch to check for squashed merges, as well. This is useful for different names of trunk branches like `main` or `develop`.
+
 ```bash
 $ npm install --global git-delete-squashed
 $ git-delete-squashed
-```
-
-You can specify an alternate branch to check for squashed merges, as well. This is useful for different names of trunk branches like `main` or `develop`.
-
-```bash
-$ npm install --global git-delete-squashed
+$ # Specify a different branch name like so
 $ git-delete-squashed main
 ```
-
 
 ## Details
 
