@@ -12,7 +12,7 @@ To run as a shellscript, simply copy the following command (setting up an alias 
 
 ```bash
 # Change $TARGET_BRANCH to your targeted branch, e.g. change from `master` to `main` to delete branches squased into `main`.
-export TARGET_BRANCH=master && git checkout -q $TARGET_BRANCH && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base $TARGET_BRANCH $branch) && [[ $(git cherry $TARGET_BRANCH $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
+TARGET_BRANCH=master && git checkout -q $TARGET_BRANCH && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base $TARGET_BRANCH $branch) && [[ $(git cherry $TARGET_BRANCH $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
 # OR you can put this function in your shell config and call it like this
 # `git-delete-squashed` OR `git-delete-squased main`
 function git-delete-squashed() {
