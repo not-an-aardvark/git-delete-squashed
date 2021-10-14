@@ -11,7 +11,7 @@ This is useful if you work on a project that squashes branches into master. Afte
 To run as a shellscript, simply copy the following command (setting up an alias is recommended). There's no need to clone the repo.
 
 ```bash
-# Change $TARGET_BRANCH to your targeted branch, e.g. change from `master` to `main` to delete branches squased into `main`.
+# Change $TARGET_BRANCH to your targeted branch, e.g. change from `master` to `main` to delete branches squashed into `main`.
 TARGET_BRANCH=master && git checkout -q $TARGET_BRANCH && git for-each-ref refs/heads/ "--format=%(refname:short)" | while read branch; do mergeBase=$(git merge-base $TARGET_BRANCH $branch) && [[ $(git cherry $TARGET_BRANCH $(git commit-tree $(git rev-parse $branch\^{tree}) -p $mergeBase -m _)) == "-"* ]] && git branch -D $branch; done
 # OR you can put this function in your shell config and call it like this
 # `git-delete-squashed` OR `git-delete-squased main`
