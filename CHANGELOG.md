@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.4 (2021-12-30)
+
+* Delete merged and squashed from other branches. ([#11](https://github.com/not-an-aardvark/git-delete-squashed/issues/11)) ([201ad37](https://github.com/not-an-aardvark/git-delete-squashed/commit/201ad377384848c208dceb42d152115bbe38061a))
+* Fix for zsh ([#10](https://github.com/not-an-aardvark/git-delete-squashed/issues/10)) ([913c21b](https://github.com/not-an-aardvark/git-delete-squashed/commit/913c21b99f932eb6ab4757f2489691e9716db8a4))
+
 ## v1.0.3 (2017-06-23)
 
 * Docs: add shell script alternative to readme ([59bb490](https://github.com/not-an-aardvark/git-delete-squashed/commit/59bb49097171f41d148be215eea25c94d2adec4e))
